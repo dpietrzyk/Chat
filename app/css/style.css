@@ -1,0 +1,148 @@
+/* global */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* navigation */
+nav, .nav-wrapper {
+    z-index: 2;
+}
+
+nav .brand-logo {
+    padding-left: 1rem;
+}
+
+/* chat */
+.chat {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 64px);
+}
+
+/* message box */
+.messages-box-wrapper {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.messages-box {
+    flex-direction: column;
+    flex-grow: 1;
+    background: yellow;
+    overflow-y: auto;
+}
+
+span.card-title-time {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    font-size: .95rem;
+}
+
+/* message input */
+.message-input-wrapper {
+    z-index: 1;
+    border-top: 1px rgba(0, 0, 0, .12) solid;
+}
+
+.message-input {
+    display: flex;
+    align-self: flex-end;
+    width: 100%;
+    min-height: 36px;
+}
+
+.message-input textarea {
+    width: auto;
+    height: 100px;
+    flex-grow: 1;
+}
+
+.message-input textarea.materialize-textarea {
+    margin-right: 1rem;
+}
+
+[type="submit"] {
+    align-self: center;
+    width: 145px;
+}
+
+/* rooms */
+.rooms {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    background: lightblue;
+    z-index: 1;
+}
+
+.tabs-fixed-width {
+    min-height: 48px;
+}
+
+.carousel {
+    flex-grow: 1;
+}
+
+.tab-swipe {
+    overflow: auto;
+}
+
+.collection {
+    cursor: pointer;
+}
+
+.collection.rm-left-border {
+    border-left: none;
+}
+
+/* helpers */
+.row.rm-margin,
+.collection.rm-margin {
+    margin: 0;
+}
+
+.row .col.rm-float {
+    float: initial;
+}
+
+/* custom scrollbar style */
+.scrollbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+}
+
+/* override colors */
+.tabs .indicator {
+    background-color: #03a9f4;
+}
+
+input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=password]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]), input[type=url]:not(.browser-default):focus:not([readonly]), input[type=time]:not(.browser-default):focus:not([readonly]), input[type=date]:not(.browser-default):focus:not([readonly]), input[type=datetime]:not(.browser-default):focus:not([readonly]), input[type=datetime-local]:not(.browser-default):focus:not([readonly]), input[type=tel]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]), input[type=search]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-color: #03a9f4;
+}
+
+.swal2-popup .swal2-input:focus {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
