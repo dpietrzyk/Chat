@@ -8,7 +8,8 @@ node main.js
 when the server is ready, open [localhost:3000](http://localhost:3000)
 
 ### Browsers:
-Tested only on Chrome and Opera
+Tested only on Chrome and Opera   
+Please do not test the chat in one browser (for example open in chrome and opera).
 
 ### Available commands:
 `/help` - show this message   
