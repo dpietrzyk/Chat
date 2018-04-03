@@ -5,10 +5,10 @@
 npm i
 node main.js
 ```
-when the server is ready, open [localhost:3000](http://localhost:3000)
+When the server is ready, open [localhost:3000](http://localhost:3000)
 
-### tests   
-to run a few very simple test
+### Tests   
+To run a few very simple test:
 ```
 npm install mocha -g
 mocha tests  --recursive --watch
