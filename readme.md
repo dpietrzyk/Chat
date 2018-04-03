@@ -7,6 +7,13 @@ node main.js
 ```
 when the server is ready, open [localhost:3000](http://localhost:3000)
 
+### tests   
+to run a few very simple test
+```
+npm install mocha -g
+mocha tests  --recursive --watch
+```
+
 ### Browsers:
 Tested only on Chrome and Opera   
 Please do not test the chat in one browser (for example open in chrome and opera).
@@ -31,3 +38,4 @@ This command sends message "Hello world!" to user with username "chat user".
 * If you want to change your current room, just click on the name of the room you want to join. 
 * If you want to send private message to other user, simply click on his name ;) 
 * If you leave the room, and there will be no other users, this room will be removed immediately. 
+

@@ -25,11 +25,11 @@ class Room {
     }
 
     get colorSet() {
-        return this._color;
+        return this._colorSet;
     }
 
     set colorSet(colorSet) {
-        this._color = colorSet;
+        this._colorSet = colorSet;
     }
 
     get numberOfUsers() {
@@ -41,7 +41,8 @@ class Room {
     }
 
     userDisconnected() {
-        this._numberOfUsers--;
+        if (this.numberOfUsers > 0)
+            this._numberOfUsers--;
     }
 
 }
