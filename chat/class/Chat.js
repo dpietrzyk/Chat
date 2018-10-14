@@ -1,3 +1,6 @@
+const morgan = require('morgan');
+const FirebaseApp = require('./../firebase/firebaseApp');
+
 const User = require('./User');
 const Room = require('./Room');
 
@@ -21,7 +24,14 @@ class Chat {
         this._registerMiddlewares();
         this._registerSockets();
 
+        this._firebaseApp.init();
         this._initServer();
+
+        this._firebaseApp.usersRef.get().then(snapshot => {
+            snapshot.forEach(doc => {
+                console.log(doc.id, '=>', doc.data());
+            });
+        });
     }
 
     get rooms() {
@@ -46,6 +56,7 @@ class Chat {
         this._defaultRoomName = 'Chat';
         this._rooms = [new Room(this._defaultRoomName, null)];
 
+        this._firebaseApp = new FirebaseApp();
     }
 
     _initComponents() {
@@ -57,6 +68,8 @@ class Chat {
     }
 
     _registerMiddlewares() {
+        this._app.use(morgan('combined'));
+
         this._app.use(express.static(
             path.join(__dirname, './../../app'),
         ));
@@ -84,9 +97,7 @@ class Chat {
 
     addUser(username, socketID) {
         this._users.push(
-            new User(
-                username, socketID,
-            ),
+            new User(username, socketID),
         );
     }
 
@@ -162,9 +173,7 @@ class Chat {
         const user = this.findUserBySocketID(socket.id);
 
         this._rooms.push(
-            new Room(
-                name, user.username, colorSet,
-            ),
+            new Room(name, user.username, colorSet),
         );
     }
 

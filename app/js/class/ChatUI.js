@@ -1,21 +1,21 @@
-import { Swal } from './Swal.js';
-import { ChatUITemplate } from './ChatUITemplate.js';
+import {Swal} from './Swal.js';
+import {ChatUITemplate} from './ChatUITemplate.js';
 
-import { createRoomFail } from '../socket/createRoomFail.js';
-import { createRoomSuccess } from '../socket/createRoomSuccess.js';
-import { createUserSuccess } from '../socket/createUserSuccess.js';
-import { changeUsernameFail } from '../socket/changeUsernameFail.js';
-import { changeUsernameInfo } from '../socket/changeUsernameInfo.js';
-import { changeUsernameSuccess } from '../socket/changeUsernameSuccess.js';
-import { createUserFail } from '../socket/createUserFail.js';
-import { createMessage } from '../socket/createMessage.js';
-import { createPrivateMessage } from '../socket/createPrivateMessage.js';
-import { changeRoomFail } from '../socket/changeRoomFail.js';
-import { changeRoomSuccess } from '../socket/changeRoomSuccess.js';
-import { impersonateAttempt } from '../socket/impersonateAttempt.js';
-import { privateMessageUserNotFound } from '../socket/privateMessageUserNotFound.js';
-import { updateRoomsList } from '../socket/updateRoomsList.js';
-import { updateUsersList } from '../socket/updateUsersList.js';
+import {createRoomFail} from '../socket/createRoomFail.js';
+import {createRoomSuccess} from '../socket/createRoomSuccess.js';
+import {createUserSuccess} from '../socket/createUserSuccess.js';
+import {changeUsernameFail} from '../socket/changeUsernameFail.js';
+import {changeUsernameInfo} from '../socket/changeUsernameInfo.js';
+import {changeUsernameSuccess} from '../socket/changeUsernameSuccess.js';
+import {createUserFail} from '../socket/createUserFail.js';
+import {createMessage} from '../socket/createMessage.js';
+import {createPrivateMessage} from '../socket/createPrivateMessage.js';
+import {changeRoomFail} from '../socket/changeRoomFail.js';
+import {changeRoomSuccess} from '../socket/changeRoomSuccess.js';
+import {impersonateAttempt} from '../socket/impersonateAttempt.js';
+import {privateMessageUserNotFound} from '../socket/privateMessageUserNotFound.js';
+import {updateRoomsList} from '../socket/updateRoomsList.js';
+import {updateUsersList} from '../socket/updateUsersList.js';
 
 export class ChatUI {
 
@@ -107,9 +107,8 @@ export class ChatUI {
         });
 
         this._scroll = new SweetScroll({
-                quickMode: true,
-            }, this._messagesBox,
-        );
+            quickMode: true,
+        }, this._messagesBox);
 
         this._tooltips.forEach(tooltip => M.Tooltip.init(tooltip, {
             delay: 50,
@@ -292,7 +291,7 @@ export class ChatUI {
         console.log(to);
 
         if (to !== this._username) {
-            
+
             this._inputMessage.value = `/priv ${to}\n`;
 
             if (this._inputMessage !== document.activeElement)
