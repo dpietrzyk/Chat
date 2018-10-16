@@ -13,6 +13,7 @@ export class Swal {
 
             preConfirm: username => {
 
+
                 if (!username.trim()) {
                     // NOTE: hack for show swal after closing previous one
                     setTimeout(() => {
@@ -20,11 +21,80 @@ export class Swal {
                     }, 150);
 
                 } else {
-                    socket.emit('createUser', {username});
+                    // socket.emit('createUser', {username});
+                    // Swal.showUserPassModal(socket, username);
                     // NOTE: hack for not closing modal after confirm
-                    return new Promise(() => {});
+                    return new Promise(() => {
+                    });
                 }
             },
+        });
+    }
+
+    static showUserNameModal(socket) {
+
+        return new Promise(resolve => {
+            swal({
+                title: 'Enter your nickname',
+                input: 'text',
+
+                showCancelButton: false,
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+
+                preConfirm: username => {
+
+                    if (!username.trim()) {
+                        // NOTE: hack for show swal after closing previous one
+                        setTimeout(() => {
+                            Swal.showInvalidUsernameModal(socket);
+                        }, 150);
+
+                    } else {
+                        // socket.emit('createUser', {username});
+                        (async () => {
+                            const pass = await Swal.showUserPassModal(socket);
+                            resolve({username, pass});
+                        })();
+                        // NOTE: hack for not closing modal after confirm
+                        return new Promise(() => {
+                        });
+                    }
+                },
+            });
+        });
+    }
+
+    static showUserPassModal(socket) {
+
+        return new Promise(resolve => {
+            swal({
+                title: 'Enter your password',
+                input: 'password',
+
+                showCancelButton: false,
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+
+                preConfirm: pass => {
+
+                    if (!pass.trim()) {
+                        // NOTE: hack for show swal after closing previous one
+                        setTimeout(() => {
+                            Swal.showInvalidUsernameModal(socket);
+                        }, 150);
+
+                    } else {
+                        // socket.emit('createUser', {pass});
+                        // NOTE: hack for not closing modal after confirm
+                        resolve(pass);
+                        return new Promise(() => {
+                        });
+                    }
+                },
+            });
         });
     }
 
@@ -52,7 +122,8 @@ export class Swal {
                 } else {
                     socket.emit('changeUsername', {username});
                     // NOTE: hack for not closing modal after confirm
-                    return new Promise(() => {});
+                    return new Promise(() => {
+                    });
                 }
             },
         });
@@ -78,7 +149,8 @@ export class Swal {
 
             allowOutsideClick: false,
 
-            onClose: () => Swal.showCreateUserModal(socket),
+            // onClose: () => Swal.showCreateUserModal(socket),
+            onClose: () => Swal.showUserNameModal(socket),
         });
     }
 
@@ -113,7 +185,8 @@ export class Swal {
 
             allowOutsideClick: false,
 
-            onClose: () => Swal.showCreateUserModal(socket),
+            onClose: () => Swal.showUserNameModal(socket),
+            // onClose: () => Swal.showCreateUserModal(socket),
         });
     }
 
@@ -141,7 +214,8 @@ export class Swal {
                 } else {
                     socket.emit('createRoom', {room});
                     // NOTE: hack for not closing modal after confirm
-                    return new Promise(() => {});
+                    return new Promise(() => {
+                    });
                 }
             },
         });
@@ -165,7 +239,8 @@ export class Swal {
 
                 socket.emit('changeRoom', {roomName: newRoomName});
                 // NOTE: hack for not closing modal after confirm
-                return new Promise(() => {});
+                return new Promise(() => {
+                });
             },
 
         });

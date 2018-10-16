@@ -1,4 +1,6 @@
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
+
 const FirebaseApp = require('./../firebase/firebaseApp');
 
 const User = require('./User');
@@ -22,6 +24,7 @@ class Chat {
         this._initComponents();
 
         this._registerMiddlewares();
+        this._registerRoutes();
         this._registerSockets();
 
         this._firebaseApp.init();
@@ -70,9 +73,25 @@ class Chat {
     _registerMiddlewares() {
         this._app.use(morgan('combined'));
 
+        this._app.use(bodyParser.json());
+        this._app.use(bodyParser.urlencoded({
+            extended: true,
+        }));
+
         this._app.use(express.static(
             path.join(__dirname, './../../app'),
         ));
+    }
+
+    _registerRoutes() {
+        this._app.post('/autenticate', (req, res) => {
+            const {username, pass} = req.body;
+            console.log(req.body);
+            console.log('here');
+
+            // TODO: generate jwt and return it! :D
+            res.send('elo');
+        });
     }
 
     _registerSockets() {

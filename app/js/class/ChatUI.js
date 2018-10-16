@@ -1,6 +1,5 @@
 import {Swal} from './Swal.js';
 import {ChatUITemplate} from './ChatUITemplate.js';
-
 import {createRoomFail} from '../socket/createRoomFail.js';
 import {createRoomSuccess} from '../socket/createRoomSuccess.js';
 import {createUserSuccess} from '../socket/createUserSuccess.js';
@@ -152,9 +151,12 @@ export class ChatUI {
         updateUsersList(this._socket, this);
     }
 
-    _initUser() {
+    async _initUser() {
         if (!Cookies.get('username') || Cookies.get('username') === '') {
-            Swal.showCreateUserModal(this._socket);
+            // Swal.showCreateUserModal(this._socket);
+            const credits = await Swal.showUserNameModal(this._socket);
+            const response = await axios.post('autenticate', {...credits});
+            console.log(response);
         } else {
             this._checkAvailableSavedUser(Cookies.get('username'));
         }

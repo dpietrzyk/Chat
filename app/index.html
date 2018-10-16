@@ -17,142 +17,143 @@
 </head>
 
 <body>
-    <nav class="blue">
-        <div class="nav-wrapper z-depth-2">
-            <a href="javascript:void(0);"
-               class="brand-logo">
-                <i class="material-icons">
-                    chat
-                </i>
-                <span class="navbar-room-name">
+<nav class="blue">
+    <div class="nav-wrapper z-depth-2">
+        <a href="javascript:void(0);"
+           class="brand-logo">
+            <i class="material-icons">
+                chat
+            </i>
+            <span class="navbar-room-name">
                     Chat
                 </span>
-            </a>
-            <ul class="right hide-on-med-and-down">
-                <li>
-                    <a href="javascript:void(0);"
-                       class="change-username tooltipped"
-                       data-position="left"
-                       data-tooltip="Change username">
-                        <i class="material-icons">
-                            account_circle
-                        </i>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);"
-                       class="create-new-room tooltipped"
-                       data-tooltip="Create room">
-                        <i class="material-icons">
-                            create_new_folder
-                        </i>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);"
-                       class="dropdown-trigger"
-                       data-target="social-links">
-                        <i class="material-icons">
-                            more_vert
-                        </i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    
-    <section class="chat">
-        <section class="messages-box-wrapper">
-            <section class="messages-box white scrollbar"></section>
-            
-            <section class="row rm-margin message-input-wrapper z-depth-5">
-                <div class="message-input input-field col">
+        </a>
+        <ul class="right hide-on-med-and-down">
+            <li>
+                <a href="javascript:void(0);"
+                   class="change-username tooltipped"
+                   data-position="left"
+                   data-tooltip="Change username">
+                    <i class="material-icons">
+                        account_circle
+                    </i>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);"
+                   class="create-new-room tooltipped"
+                   data-tooltip="Create room">
+                    <i class="material-icons">
+                        create_new_folder
+                    </i>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);"
+                   class="dropdown-trigger"
+                   data-target="social-links">
+                    <i class="material-icons">
+                        more_vert
+                    </i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<section class="chat">
+    <section class="messages-box-wrapper">
+        <section class="messages-box white scrollbar"></section>
+
+        <section class="row rm-margin message-input-wrapper z-depth-5">
+            <div class="message-input input-field col">
                     
                     <textarea class="materialize-textarea"
                               id="message"
                               name="message"></textarea>
-                    
-                    <label class="light-blue-text">
-                        Type "/help" for more info
-                    </label>
-                    
-                    <button class="btn waves-effect waves-light light-blue send-message"
-                            type="submit"
-                            name="action">
-                        Submit
-                        <i class="material-icons right">
-                            send
-                        </i>
-                    </button>
-                </div>
-            </section>
-        </section>
-        <section class="rooms scrollbar z-depth-1">
-            
-            <ul id="tabs-swipe"
-                class="tabs ui-tabs tabs-fixed-width">
-                
-                <li class="tab">
-                    <a href="#tab-all-users"
-                       class="active light-blue-text">
-                        Users
-                    </a>
-                </li>
-                
-                <li class="tab">
-                    <a href="#tab-all-rooms"
-                       class="light-blue-text">
-                        Rooms
-                    </a>
-                </li>
-            
-            </ul>
-            
-            <section id="tab-all-users"
-                     class="scrollbar tab-swipe white">
-                
-                <ul class="collection rm-margin rm-left-border users-collection"></ul>
-            
-            </section>
-            
-            <section id="tab-all-rooms"
-                     class="scrollbar tab-swipe white">
-                
-                <ul class="collection rm-margin rm-left-border rooms-collection"></ul>
-            
-            </section>
-        
+
+                <label class="light-blue-text">
+                    Type "/help" for more info
+                </label>
+
+                <button class="btn waves-effect waves-light light-blue send-message"
+                        type="submit"
+                        name="action">
+                    Submit
+                    <i class="material-icons right">
+                        send
+                    </i>
+                </button>
+            </div>
         </section>
     </section>
-    
-    <ul id="social-links"
-        class="dropdown-content">
-        <li>
-            <a href="https://github.com/dpietrzyk"
-               target="_blank">
-                github.com
-            </a>
-        </li>
-        <li>
-            <a href="https://www.linkedin.com/in/damian-pietrzyk/"
-               target="_blank">
-                linkedIn
-            </a>
-        </li>
-    
-    </ul>
-    
-    <script src="./libs/js.cookie.min.js"
-            async></script>
-    <script src="./libs/materialize/materialize.min.js"
-            async></script>
-    <script src="./libs/sweetalert2.js"
-            async></script>
-    <script src="./libs/sweet-scroll.min.js"
-            async></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/app.js"
-            type="module"></script>
+    <section class="rooms scrollbar z-depth-1">
+
+        <ul id="tabs-swipe"
+            class="tabs ui-tabs tabs-fixed-width">
+
+            <li class="tab">
+                <a href="#tab-all-users"
+                   class="active light-blue-text">
+                    Users
+                </a>
+            </li>
+
+            <li class="tab">
+                <a href="#tab-all-rooms"
+                   class="light-blue-text">
+                    Rooms
+                </a>
+            </li>
+
+        </ul>
+
+        <section id="tab-all-users"
+                 class="scrollbar tab-swipe white">
+
+            <ul class="collection rm-margin rm-left-border users-collection"></ul>
+
+        </section>
+
+        <section id="tab-all-rooms"
+                 class="scrollbar tab-swipe white">
+
+            <ul class="collection rm-margin rm-left-border rooms-collection"></ul>
+
+        </section>
+
+    </section>
+</section>
+
+<ul id="social-links"
+    class="dropdown-content">
+    <li>
+        <a href="https://github.com/dpietrzyk"
+           target="_blank">
+            github.com
+        </a>
+    </li>
+    <li>
+        <a href="https://www.linkedin.com/in/damian-pietrzyk/"
+           target="_blank">
+            linkedIn
+        </a>
+    </li>
+
+</ul>
+
+<script src="./libs/js.cookie.min.js"
+        async></script>
+<script src="./libs/materialize/materialize.min.js"
+        async></script>
+<script src="./libs/sweetalert2.js"
+        async></script>
+<script src="./libs/sweet-scroll.min.js"
+        async></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="./js/app.js"
+        type="module"></script>
 </body>
 
 </html>
