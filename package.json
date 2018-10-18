@@ -16,6 +16,8 @@
     "crypto": "^1.0.1",
     "express": "^4.16.3",
     "firebase-admin": "^6.0.0",
+    "jsonwebtoken": "8.3.0",
+    "password-hash": "1.2.2",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {

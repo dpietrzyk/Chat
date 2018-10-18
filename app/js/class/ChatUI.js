@@ -18,169 +18,184 @@ import {updateUsersList} from '../socket/updateUsersList.js';
 
 export class ChatUI {
 
-    constructor() {
+  constructor() {
 
-        this._initVariables();
-        this._initComponents();
-        this._initListeners();
+    this._initVariables();
+    this._initComponents();
+    this._initListeners();
 
-        this._registerSockets();
+    this._initUser();
+  }
 
-        this._initUser();
+  get username() {
+    return this._username;
+  }
+
+  set username(username) {
+    this._username = username;
+  }
+
+  get sysName() {
+    return this._sysName;
+  }
+
+  set sysName(sysName) {
+    this._sysName = sysName;
+  }
+
+  _initVariables() {
+    this._key = {
+      'CTRL': {
+        code: 17,
+        pressed: false,
+
+      }, 'SHIFT': {
+        code: 16,
+        pressed: false,
+
+      }, 'ENTER': {
+        code: 13,
+        pressed: false,
+
+      },
+    };
+
+    // this._socket = io();
+
+    this._username = null;
+    this._roomName = 'Chat';
+    this._sysName = 'Chat';
+  }
+
+
+  _initComponents() {
+
+    this._btnSubmit = document.querySelector('.send-message');
+    this._inputMessage = document.querySelector('textarea[name="message"]');
+    this._inputMessageMaterial = document.querySelector('textarea[name="message"] div');
+    this._messagesBox = document.querySelector('.messages-box');
+
+    this._usersCollection = document.querySelector('.users-collection');
+    this._roomsCollection = document.querySelector('.rooms-collection');
+
+    this._tabs = document.querySelector('#tabs-swipe');
+    this._tooltips = document.querySelectorAll('.tooltipped');
+
+    this._createNewRoom = document.querySelector('.create-new-room');
+    this._changeUsername = document.querySelector('.change-username');
+
+    this._navbarRoomName = document.querySelector('.navbar-room-name');
+    this._dropdownTrigger = document.querySelector('.dropdown-trigger');
+
+    this._initReplays();
+
+    this._initMaterialComponents();
+  }
+
+  _initReplays() {
+    this._replays = document.querySelectorAll('.replay');
+  }
+
+  _initMaterialComponents() {
+
+    M.Tabs.init(this._tabs, {
+      duration: 150,
+      swipeable: true,
+    });
+
+    this._scroll = new SweetScroll({
+      quickMode: true,
+    }, this._messagesBox);
+
+    this._tooltips.forEach(tooltip => M.Tooltip.init(tooltip, {
+      delay: 50,
+      position: 'bottom',
+    }));
+
+    M.Dropdown.init(this._dropdownTrigger, {});
+
+  }
+
+  _initListeners() {
+    this._btnSubmit.addEventListener('click', this._onSendMessageBtnClick.bind(this));
+    this._inputMessage.addEventListener('keydown', this._onInputMessageKeyDown.bind(this));
+    this._inputMessage.addEventListener('keyup', this._onInputMessageKeyUp.bind(this));
+
+    this._createNewRoom.addEventListener('click', this._onCreateNewRoomClick.bind(this));
+    this._changeUsername.addEventListener('click', this._onChangeUsernameClick.bind(this));
+
+    this._initReplaysListeners();
+  }
+
+  _initReplaysListeners() {
+    this._replays.forEach(replay => replay.addEventListener('click', this._onCreatePrivateMessageClick.bind(this)));
+  }
+
+  _registerSockets() {
+    changeRoomFail(this._socket);
+    changeRoomSuccess(this._socket, this);
+    changeUsernameFail(this._socket);
+    changeUsernameInfo(this._socket, this);
+    changeUsernameSuccess(this._socket, this);
+    createMessage(this._socket, this);
+    createPrivateMessage(this._socket, this);
+    createRoomFail(this._socket);
+    createRoomSuccess(this._socket, this);
+    createUserFail(this._socket);
+    createUserSuccess(this._socket, this);
+    impersonateAttempt(this._socket);
+    privateMessageUserNotFound(this._socket, this);
+    updateRoomsList(this._socket, this);
+    updateUsersList(this._socket, this);
+  }
+
+  _initWebSockets() {
+    this._socket = io();
+
+    this._registerSockets();
+  }
+
+  async _autenthicate(credits) {
+    const response = await axios.post('autenticate', {...credits});
+
+    console.log(response);
+
+  }
+
+  async _initUser() {
+    const credits = await Swal.showUserNameModal(this._socket);
+    await this._autenthicate(credits)
+    this._initWebSockets();
+
+    /*if (!Cookies.get('username') || Cookies.get('username') === '') {
+        // Swal.showCreateUserModal(this._socket);
+        const credits = await Swal.showUserNameModal(this._socket);
+        const response = await axios.post('autenticate', {...credits});
+        console.log(response);
+    } else {
+        this._checkAvailableSavedUser(Cookies.get('username'));
+    }*/
+  }
+
+  _onSendMessageBtnClick(e) {
+    e.preventDefault();
+
+    if (!this._username) {
+      Swal.showInvalidUsernameModal(this._socket);
+      return;
     }
 
-    get username() {
-        return this._username;
-    }
+    const msg = this._inputMessage.value;
 
-    set username(username) {
-        this._username = username;
-    }
+    if (!msg.trim())
+      return;
 
-    get sysName() {
-        return this._sysName;
-    }
+    const help = /^(\/help)$/g;
+    const priv = /^(\/priv)/g;
 
-    set sysName(sysName) {
-        this._sysName = sysName;
-    }
+    if (help.test(msg)) {
 
-    _initVariables() {
-        this._key = {
-            'CTRL': {
-                code: 17,
-                pressed: false,
-
-            }, 'SHIFT': {
-                code: 16,
-                pressed: false,
-
-            }, 'ENTER': {
-                code: 13,
-                pressed: false,
-
-            },
-        };
-
-        this._socket = io();
-
-        this._username = null;
-        this._roomName = 'Chat';
-        this._sysName = 'Chat';
-    }
-
-
-    _initComponents() {
-
-        this._btnSubmit = document.querySelector('.send-message');
-        this._inputMessage = document.querySelector('textarea[name="message"]');
-        this._inputMessageMaterial = document.querySelector('textarea[name="message"] div');
-        this._messagesBox = document.querySelector('.messages-box');
-
-        this._usersCollection = document.querySelector('.users-collection');
-        this._roomsCollection = document.querySelector('.rooms-collection');
-
-        this._tabs = document.querySelector('#tabs-swipe');
-        this._tooltips = document.querySelectorAll('.tooltipped');
-
-        this._createNewRoom = document.querySelector('.create-new-room');
-        this._changeUsername = document.querySelector('.change-username');
-
-        this._navbarRoomName = document.querySelector('.navbar-room-name');
-        this._dropdownTrigger = document.querySelector('.dropdown-trigger');
-
-        this._initReplays();
-
-        this._initMaterialComponents();
-    }
-
-    _initReplays() {
-        this._replays = document.querySelectorAll('.replay');
-    }
-
-    _initMaterialComponents() {
-
-        M.Tabs.init(this._tabs, {
-            duration: 150,
-            swipeable: true,
-        });
-
-        this._scroll = new SweetScroll({
-            quickMode: true,
-        }, this._messagesBox);
-
-        this._tooltips.forEach(tooltip => M.Tooltip.init(tooltip, {
-            delay: 50,
-            position: 'bottom',
-        }));
-
-        M.Dropdown.init(this._dropdownTrigger, {});
-
-    }
-
-    _initListeners() {
-        this._btnSubmit.addEventListener('click', this._onSendMessageBtnClick.bind(this));
-        this._inputMessage.addEventListener('keydown', this._onInputMessageKeyDown.bind(this));
-        this._inputMessage.addEventListener('keyup', this._onInputMessageKeyUp.bind(this));
-
-        this._createNewRoom.addEventListener('click', this._onCreateNewRoomClick.bind(this));
-        this._changeUsername.addEventListener('click', this._onChangeUsernameClick.bind(this));
-
-        this._initReplaysListeners();
-    }
-
-    _initReplaysListeners() {
-        this._replays.forEach(replay => replay.addEventListener('click', this._onCreatePrivateMessageClick.bind(this)));
-    }
-
-    _registerSockets() {
-        changeRoomFail(this._socket);
-        changeRoomSuccess(this._socket, this);
-        changeUsernameFail(this._socket);
-        changeUsernameInfo(this._socket, this);
-        changeUsernameSuccess(this._socket, this);
-        createMessage(this._socket, this);
-        createPrivateMessage(this._socket, this);
-        createRoomFail(this._socket);
-        createRoomSuccess(this._socket, this);
-        createUserFail(this._socket);
-        createUserSuccess(this._socket, this);
-        impersonateAttempt(this._socket);
-        privateMessageUserNotFound(this._socket, this);
-        updateRoomsList(this._socket, this);
-        updateUsersList(this._socket, this);
-    }
-
-    async _initUser() {
-        if (!Cookies.get('username') || Cookies.get('username') === '') {
-            // Swal.showCreateUserModal(this._socket);
-            const credits = await Swal.showUserNameModal(this._socket);
-            const response = await axios.post('autenticate', {...credits});
-            console.log(response);
-        } else {
-            this._checkAvailableSavedUser(Cookies.get('username'));
-        }
-    }
-
-    _onSendMessageBtnClick(e) {
-        e.preventDefault();
-
-        if (!this._username) {
-            Swal.showInvalidUsernameModal(this._socket);
-            return;
-        }
-
-        const msg = this._inputMessage.value;
-
-        if (!msg.trim())
-            return;
-
-        const help = /^(\/help)$/g;
-        const priv = /^(\/priv)/g;
-
-        if (help.test(msg)) {
-
-            const mess = `/help - show this message,
+      const mess = `/help - show this message,
             /priv - send private message to chosen user. If you want to use this please stick to this scheme:
             
             /priv [username with space] [new line]
@@ -203,175 +218,175 @@ export class ChatUI {
             If you leave the room, and there will be no other users, this room will be removed immediately. 
             `;
 
-            this.createSystemMessage(mess);
+      this.createSystemMessage(mess);
 
-        } else if (priv.test(msg)) {
-            let firstLine = msg.split('\n')[0];
-            const username = firstLine.replace('/priv', '').trim();
-            const message = msg.replace(firstLine, '').trim();
+    } else if (priv.test(msg)) {
+      let firstLine = msg.split('\n')[0];
+      const username = firstLine.replace('/priv', '').trim();
+      const message = msg.replace(firstLine, '').trim();
 
 
-            if (username && message && username !== this._username) {
-                this._socket.emit('privateMessage', {
-                    username,
-                    message,
-                });
-            } else if (username === this._username) {
-                this.createPrivateMessage(
-                    this._sysName,
-                    'Why do you want to send a message to yourself?',
-                    new Date());
-            }
-
-        } else {
-
-            this._socket.emit('message', {
-                username: this._username,
-                msg,
-                socketID: this._socket.id,
-            });
-        }
-
-        this._inputMessage.value = '';
-    }
-
-    _onInputMessageKeyDown(e) {
-        if (e.keyCode === this._key.CTRL.code) {
-            this._key.CTRL.pressed = true;
-        } else if (e.keyCode === this._key.SHIFT.code) {
-            this._key.SHIFT.pressed = true;
-        }
-
-        if (this._key.CTRL.pressed && e.keyCode === this._key.ENTER.code)
-            this._inputMessage.value += '\n';
-
-        if (!this._key.CTRL.pressed && !this._key.SHIFT.pressed && e.keyCode === this._key.ENTER.code)
-            this._btnSubmit.click();
-    }
-
-    _onInputMessageKeyUp(e) {
-        if (!this._key.CTRL.pressed && !this._key.SHIFT.pressed && e.keyCode === this._key.ENTER.code)
-            this._inputMessage.value = '';
-
-        if (e.keyCode === this._key.CTRL.code) {
-            this._key.CTRL.pressed = false;
-        } else if (e.keyCode === this._key.SHIFT.code) {
-            this._key.SHIFT.pressed = false;
-        }
-    }
-
-    _onCreateNewRoomClick() {
-        Swal.showCreateRoomModal(this._socket);
-    }
-
-    _onChangeUsernameClick() {
-        Swal.showChangeUsernameModal(this._socket);
-    }
-
-    _onJoinToRoomClick(e) {
-        let el = e.target;
-
-        while (el && el.parentNode && el.tagName.toLocaleLowerCase() !== 'li')
-            el = el.parentNode;
-
-        const roomName = el.getAttribute('data-roomname');
-
-        if (el.getAttribute('data-roomname') !== this._roomName)
-            Swal.showJoinToNewRoomModal(this._socket, this._roomName, roomName);
-    }
-
-    _onCreatePrivateMessageClick(e) {
-        e.preventDefault();
-
-        let el = e.target;
-
-        while (!el.getAttribute('data-to') && el && el.parentNode && el.tagName.toLocaleLowerCase() !== 'li')
-            el = el.parentNode;
-
-        const to = el.getAttribute('data-to');
-
-        console.log(to);
-
-        if (to !== this._username) {
-
-            this._inputMessage.value = `/priv ${to}\n`;
-
-            if (this._inputMessage !== document.activeElement)
-                this._inputMessage.focus();
-
-        }
-    }
-
-    _checkAvailableSavedUser(username) {
-        this._socket.emit('createUser', {
-            username,
+      if (username && message && username !== this._username) {
+        this._socket.emit('privateMessage', {
+          username,
+          message,
         });
+      } else if (username === this._username) {
+        this.createPrivateMessage(
+            this._sysName,
+            'Why do you want to send a message to yourself?',
+            new Date());
+      }
+
+    } else {
+
+      this._socket.emit('message', {
+        username: this._username,
+        msg,
+        socketID: this._socket.id,
+      });
     }
 
-    _addNewMessage(username, msg, date, system = true, owner = false, colorSet = null, privateMessage = false, privateMessageError = false) {
-        this._messagesBox.appendChild(
-            ChatUITemplate.getMessageTemplate(
-                username, msg, date, system, owner, colorSet, privateMessage, privateMessageError,
-            ),
-        );
+    this._inputMessage.value = '';
+  }
 
-        this._scroll.to(this._messagesBox.scrollHeight, 450);
+  _onInputMessageKeyDown(e) {
+    if (e.keyCode === this._key.CTRL.code) {
+      this._key.CTRL.pressed = true;
+    } else if (e.keyCode === this._key.SHIFT.code) {
+      this._key.SHIFT.pressed = true;
     }
 
-    changeRoom(roomName) {
-        this._roomName = roomName;
-        this._navbarRoomName.innerText = this._roomName;
+    if (this._key.CTRL.pressed && e.keyCode === this._key.ENTER.code)
+      this._inputMessage.value += '\n';
+
+    if (!this._key.CTRL.pressed && !this._key.SHIFT.pressed && e.keyCode === this._key.ENTER.code)
+      this._btnSubmit.click();
+  }
+
+  _onInputMessageKeyUp(e) {
+    if (!this._key.CTRL.pressed && !this._key.SHIFT.pressed && e.keyCode === this._key.ENTER.code)
+      this._inputMessage.value = '';
+
+    if (e.keyCode === this._key.CTRL.code) {
+      this._key.CTRL.pressed = false;
+    } else if (e.keyCode === this._key.SHIFT.code) {
+      this._key.SHIFT.pressed = false;
     }
+  }
 
-    createSystemMessage(msg) {
-        this._addNewMessage(this._sysName, msg, new Date(), true, false, null);
+  _onCreateNewRoomClick() {
+    Swal.showCreateRoomModal(this._socket);
+  }
+
+  _onChangeUsernameClick() {
+    Swal.showChangeUsernameModal(this._socket);
+  }
+
+  _onJoinToRoomClick(e) {
+    let el = e.target;
+
+    while (el && el.parentNode && el.tagName.toLocaleLowerCase() !== 'li')
+      el = el.parentNode;
+
+    const roomName = el.getAttribute('data-roomname');
+
+    if (el.getAttribute('data-roomname') !== this._roomName)
+      Swal.showJoinToNewRoomModal(this._socket, this._roomName, roomName);
+  }
+
+  _onCreatePrivateMessageClick(e) {
+    e.preventDefault();
+
+    let el = e.target;
+
+    while (!el.getAttribute('data-to') && el && el.parentNode && el.tagName.toLocaleLowerCase() !== 'li')
+      el = el.parentNode;
+
+    const to = el.getAttribute('data-to');
+
+    console.log(to);
+
+    if (to !== this._username) {
+
+      this._inputMessage.value = `/priv ${to}\n`;
+
+      if (this._inputMessage !== document.activeElement)
+        this._inputMessage.focus();
+
     }
+  }
 
-    createMessage(username, msg, date, owner = false, colorSet = null) {
-        this._addNewMessage(username, msg, date, false, owner, colorSet);
+  _checkAvailableSavedUser(username) {
+    this._socket.emit('createUser', {
+      username,
+    });
+  }
+
+  _addNewMessage(username, msg, date, system = true, owner = false, colorSet = null, privateMessage = false, privateMessageError = false) {
+    this._messagesBox.appendChild(
+        ChatUITemplate.getMessageTemplate(
+            username, msg, date, system, owner, colorSet, privateMessage, privateMessageError,
+        ),
+    );
+
+    this._scroll.to(this._messagesBox.scrollHeight, 450);
+  }
+
+  changeRoom(roomName) {
+    this._roomName = roomName;
+    this._navbarRoomName.innerText = this._roomName;
+  }
+
+  createSystemMessage(msg) {
+    this._addNewMessage(this._sysName, msg, new Date(), true, false, null);
+  }
+
+  createMessage(username, msg, date, owner = false, colorSet = null) {
+    this._addNewMessage(username, msg, date, false, owner, colorSet);
+  }
+
+  createPrivateMessage(username, msg, date, owner = false, privateMessageError = false) {
+
+    const colorSet = {
+      color: 'black',
+      hue: '',
+      fontColor: 'white-text',
+    };
+
+    this._addNewMessage(username, msg, date, false, owner, colorSet, true, privateMessageError);
+    this._initReplays();
+    this._initReplaysListeners();
+  }
+
+  updateUsersList(users) {
+
+    while (this._usersCollection.firstChild)
+      this._usersCollection.removeChild(this._usersCollection.firstChild);
+
+    for (let user of users) {
+
+      const userLi = ChatUITemplate.getUserTemplate(user, user._username === this.username);
+
+      userLi.addEventListener('click', this._onCreatePrivateMessageClick.bind(this));
+
+      this._usersCollection.appendChild(userLi);
     }
+  }
 
-    createPrivateMessage(username, msg, date, owner = false, privateMessageError = false) {
+  updateRoomsList(rooms) {
 
-        const colorSet = {
-            color: 'black',
-            hue: '',
-            fontColor: 'white-text',
-        };
+    while (this._roomsCollection.firstChild)
+      this._roomsCollection.removeChild(this._roomsCollection.firstChild);
 
-        this._addNewMessage(username, msg, date, false, owner, colorSet, true, privateMessageError);
-        this._initReplays();
-        this._initReplaysListeners();
+    for (let room of rooms) {
+
+      const roomLi = ChatUITemplate.getRoomTemplate(room, room._ownerUsername === this.username);
+
+      roomLi.addEventListener('click', this._onJoinToRoomClick.bind(this));
+
+      this._roomsCollection.appendChild(roomLi);
     }
-
-    updateUsersList(users) {
-
-        while (this._usersCollection.firstChild)
-            this._usersCollection.removeChild(this._usersCollection.firstChild);
-
-        for (let user of users) {
-
-            const userLi = ChatUITemplate.getUserTemplate(user, user._username === this.username);
-
-            userLi.addEventListener('click', this._onCreatePrivateMessageClick.bind(this));
-
-            this._usersCollection.appendChild(userLi);
-        }
-    }
-
-    updateRoomsList(rooms) {
-
-        while (this._roomsCollection.firstChild)
-            this._roomsCollection.removeChild(this._roomsCollection.firstChild);
-
-        for (let room of rooms) {
-
-            const roomLi = ChatUITemplate.getRoomTemplate(room, room._ownerUsername === this.username);
-
-            roomLi.addEventListener('click', this._onJoinToRoomClick.bind(this));
-
-            this._roomsCollection.appendChild(roomLi);
-        }
-    }
+  }
 
 }
