@@ -1,14 +1,17 @@
 class FirebaseUser {
 
-  static async get(usersRef, username) {
-    let user;
-    const UserSnapshot = await usersRef.where('name', '==', username).get();
-    UserSnapshot.forEach(doc => {
-      user = doc.data();
-    });
+    static async get(usersRef, username) {
+        let user;
+        const UserSnapshot = await usersRef.where('name', '==', username).get();
+        UserSnapshot.forEach(doc => {
+            user = doc.data();
+        });
 
-    return user;
-  }
+        if (user)
+            return user;
+
+        throw new Error('User not found');
+    }
 
 }
 

@@ -1,3 +1,5 @@
+import {Session} from './Session.js';
+
 export class Swal {
 
     static showCreateUserModal(socket) {
@@ -165,6 +167,16 @@ export class Swal {
         });
     }
 
+    static showAuthSuccessModal(username) {
+        swal({
+            type: 'success',
+            title: 'You have successfully logged in',
+            text: `Welcame: ${username}`,
+
+            allowOutsideClick: false,
+        });
+    }
+
 
     static showChangeUsernameUserNotFoundModal() {
         swal({
@@ -174,6 +186,32 @@ export class Swal {
 
             allowOutsideClick: false,
         });
+    }
+
+    static showInvalidTokenModal(socket) {
+        swal({
+            type: 'error',
+            title: 'Oops...',
+            text: `Probably your session expired.. Please try to login again ;)`,
+
+            allowOutsideClick: false,
+
+            onClose: () => Session.getOrCreateToken(socket),
+        });
+    }
+
+    static showAuthFailedModal() {
+        return new Promise(resolve => {
+            swal({
+                type: 'error',
+                title: 'Oops...',
+                text: `We have no user with this username and password.. Try again!`,
+
+                allowOutsideClick: false,
+
+                onClose: () => resolve(),
+            });
+        })
     }
 
 
