@@ -27,8 +27,6 @@ export class ChatUI {
     this._initListeners();
 
     this._initSession();
-
-    // this._initUser();
   }
 
   get username() {
@@ -86,7 +84,7 @@ export class ChatUI {
     this._tooltips = document.querySelectorAll('.tooltipped');
 
     this._createNewRoom = document.querySelector('.create-new-room');
-        this._changeUsername = document.querySelector('.change-username');
+    this._changeUsername = document.querySelector('.change-username');
 
     this._navbarRoomName = document.querySelector('.navbar-room-name');
     this._dropdownTrigger = document.querySelector('.dropdown-trigger');
@@ -157,27 +155,10 @@ export class ChatUI {
   async _initSession() {
     const token = await Session.getOrCreateToken(this._socket);
 
-    console.log('token', Session.token);
-    console.log('token', Session.name);
-    console.log('token', Session.decodeToken(Session.token));
-
     this._socket = io(`${window.location.href}?jwt=${token}`);
     this._registerSockets();
 
-    this._checkAvailableSavedUser(Session.name);
-  }
-
-
-  async _initUser() {
-
-    /*if (!Cookies.get('name') || Cookies.get('name') === '') {
-        // Swal.showCreateUserModal(this._socket);
-        const credits = await Swal.showUserNameModal(this._socket);
-        const response = await axios.post('authenticate', {...credits});
-        console.log(response);
-    } else {
-        this._checkAvailableSavedUser(Cookies.get('name'));
-    }*/
+    this._checkAvailableSavedUser(Cookies.get('username') || Session.usernameFromToken);
   }
 
   _onSendMessageBtnClick(e) {

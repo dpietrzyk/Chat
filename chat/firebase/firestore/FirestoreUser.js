@@ -1,4 +1,4 @@
-class FirebaseUser {
+class FirestoreUser {
 
     static async get(usersRef, username) {
         let user;
@@ -15,4 +15,4 @@ class FirebaseUser {
 
 }
 
-module.exports = FirebaseUser;
+module.exports = FirestoreUser;

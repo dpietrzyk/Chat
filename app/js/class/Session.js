@@ -38,16 +38,11 @@ export class Session {
     return _savedToken || Cookies.get('jwt');
   }
 
-  static get name() {
+  static get usernameFromToken() {
     if (!this.token)
       throw new Error('No saved token!');
 
     return this.decodeToken(this.token).name;
   }
 
-
 }
-
-
-
-

@@ -14,11 +14,17 @@ class FirebaseApp {
     });
 
     this._firestore = admin.firestore();
+
     this._usersRef = this._firestore.collection('users');
+    this._messagesRef = this._firestore.collection('messages');
   }
 
   get usersRef() {
     return this._usersRef;
+  }
+
+  get messagesRef() {
+    return this._messagesRef;
   }
 
 }
