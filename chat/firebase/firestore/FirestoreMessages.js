@@ -3,7 +3,7 @@ class FirestoreMessages {
     static async fetch(messagesRef) {
         let messages = [];
 
-        const messagesSnapshot = await messagesRef.limit(25).orderBy('date', 'desc').get();
+        const messagesSnapshot = await messagesRef.limit(100).orderBy('date', 'desc').get();
         messagesSnapshot.forEach(doc => {
             messages.push(doc.data());
         });

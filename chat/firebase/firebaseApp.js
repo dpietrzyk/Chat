@@ -3,29 +3,29 @@ const serviceAccount = require('./../../serviceAccountKey.json');
 
 class FirebaseApp {
 
-  init() {
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      databaseURL: 'https://dpietrzyk-chat.firebaseio.com',
-    });
+    get usersRef() {
+        return this._usersRef;
+    }
 
-    admin.firestore().settings({
-      timestampsInSnapshots: true,
-    });
+    get messagesRef() {
+        return this._messagesRef;
+    }
 
-    this._firestore = admin.firestore();
+    init() {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            databaseURL: 'https://dpietrzyk-chat.firebaseio.com',
+        });
 
-    this._usersRef = this._firestore.collection('users');
-    this._messagesRef = this._firestore.collection('messages');
-  }
+        admin.firestore().settings({
+            timestampsInSnapshots: true,
+        });
 
-  get usersRef() {
-    return this._usersRef;
-  }
+        this._firestore = admin.firestore();
 
-  get messagesRef() {
-    return this._messagesRef;
-  }
+        this._usersRef = this._firestore.collection('users');
+        this._messagesRef = this._firestore.collection('messages');
+    }
 
 }
 

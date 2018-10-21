@@ -1,4 +1,4 @@
-import { Swal } from '../class/Swal.js';
+import {Swal} from '../class/Swal.js';
 
 export const changeUsernameFail = (socket) => {
     socket.on('changeUsernameFail', ({username, available}) => {

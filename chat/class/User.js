@@ -16,36 +16,62 @@ class User {
         return this._privateRoomHash;
     }
 
-    get username() { return this._username; }
+    get username() {
+        return this._username;
+    }
 
-    set username(value) { this._username = value; }
+    set username(value) {
+        this._username = value;
+    }
 
-    get room() { return this._room; }
+    get room() {
+        return this._room;
+    }
 
-    set room(value) { this._room = value; }
+    set room(value) {
+        this._room = value;
+    }
 
-    get colorSet() { return this._colorSet; }
+    get colorSet() {
+        return this._colorSet;
+    }
 
-    set colorSet(value) { this._colorSet = value; }
+    set colorSet(value) {
+        this._colorSet = value;
+    }
 
-    get color() { return this._colorSet.color; }
+    get color() {
+        return this._colorSet.color;
+    }
 
-    set color(val) { this._colorSet.color = val; }
+    set color(val) {
+        this._colorSet.color = val;
+    }
 
-    get hue() { return this._colorSet.hue; }
+    get hue() {
+        return this._colorSet.hue;
+    }
 
-    set hue(val) { this._colorSet.hue = val; }
+    set hue(val) {
+        this._colorSet.hue = val;
+    }
 
-    get fontColor() { return this._colorSet.fontColor; }
+    get fontColor() {
+        return this._colorSet.fontColor;
+    }
 
-    set fontColor(val) { this._colorSet.fontColor = val; }
+    set fontColor(val) {
+        this._colorSet.fontColor = val;
+    }
 
-    hasThisSocketID(socketID) { return this._socketID === socketID; }
+    hasThisSocketID(socketID) {
+        return this._socketID === socketID;
+    }
 
     _generateRandomHash(len) {
         return crypto.randomBytes(Math.ceil(len / 2))
-        .toString('hex')
-        .slice(0, len).toUpperCase();
+            .toString('hex')
+            .slice(0, len).toUpperCase();
     }
 }
 

@@ -23,8 +23,6 @@ export class Swal {
                     }, 150);
 
                 } else {
-                    // socket.emit('createUser', {username});
-                    // Swal.showUserPassModal(socket, username);
                     // NOTE: hack for not closing modal after confirm
                     return new Promise(() => {
                     });
@@ -54,7 +52,6 @@ export class Swal {
                         }, 150);
 
                     } else {
-                        // socket.emit('createUser', {username});
                         (async () => {
                             const pass = await Swal.showUserPassModal(socket);
                             resolve({username, pass});
@@ -89,7 +86,6 @@ export class Swal {
                         }, 150);
 
                     } else {
-                        // socket.emit('createUser', {pass});
                         // NOTE: hack for not closing modal after confirm
                         resolve(pass);
                         return new Promise(() => {
@@ -142,6 +138,20 @@ export class Swal {
         });
     }
 
+    static showLogoutSuccessModal() {
+        return new Promise(resolve => {
+            swal({
+                type: 'success',
+                title: 'Logout',
+                text: 'You are successfully logged out!',
+
+                allowOutsideClick: false,
+
+                onClose: () => resolve(),
+            });
+        })
+    }
+
 
     static showChangeUsernameFailModal(socket) {
         swal({
@@ -151,7 +161,6 @@ export class Swal {
 
             allowOutsideClick: false,
 
-            // onClose: () => Swal.showCreateUserModal(socket),
             onClose: () => Swal.showUserNameModal(socket),
         });
     }
@@ -211,7 +220,7 @@ export class Swal {
 
                 onClose: () => resolve(),
             });
-        })
+        });
     }
 
 
@@ -224,7 +233,6 @@ export class Swal {
             allowOutsideClick: false,
 
             onClose: () => Swal.showUserNameModal(socket),
-            // onClose: () => Swal.showCreateUserModal(socket),
         });
     }
 

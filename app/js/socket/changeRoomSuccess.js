@@ -1,4 +1,4 @@
-import { Swal } from '../class/Swal.js';
+import {Swal} from '../class/Swal.js';
 
 export const changeRoomSuccess = (socket, chatUI) => {
     socket.on('changeRoomSuccess', ({roomName}) => {

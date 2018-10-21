@@ -1,8 +1,8 @@
 class FirestoreMessage {
 
-  static async create(messagesRef, messageObj) {
-    await messagesRef.add(messageObj);
-  }
+    static async create(messagesRef, messageObj) {
+        await messagesRef.add(messageObj);
+    }
 
 }
 

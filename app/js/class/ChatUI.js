@@ -62,9 +62,8 @@ export class ChatUI {
             },
         };
 
-        // this._socket = io();
-
         this._username = null;
+        this._login = null;
         this._roomName = 'Chat';
         this._sysName = 'Chat';
     }
@@ -88,6 +87,8 @@ export class ChatUI {
 
         this._navbarRoomName = document.querySelector('.navbar-room-name');
         this._dropdownTrigger = document.querySelector('.dropdown-trigger');
+
+        this._btnLogout = document.querySelector('#logout');
 
         this._initReplays();
 
@@ -126,6 +127,8 @@ export class ChatUI {
         this._createNewRoom.addEventListener('click', this._onCreateNewRoomClick.bind(this));
         this._changeUsername.addEventListener('click', this._onChangeUsernameClick.bind(this));
 
+        this._btnLogout.addEventListener('click', this._onLogoutClick.bind(this));
+
         this._initReplaysListeners();
     }
 
@@ -160,6 +163,8 @@ export class ChatUI {
         this._socket = io(`${window.location.href}?jwt=${token}`);
         this._registerSockets();
 
+        this._login = Session.usernameFromToken;
+
         this._checkAvailableSavedUser(Cookies.get('username') || Session.usernameFromToken);
     }
 
@@ -168,10 +173,10 @@ export class ChatUI {
         const messages = response.data;
 
         for (const message of messages) {
-            const {username, msg, date, colorSet} = message;
-            console.log(message)
+            const {username, msg, date, colorSet, login} = message;
+
             this.createMessage(
-                username, msg, new Date(date), this.username = username, colorSet,
+                username, msg, new Date(date), this._login === login, colorSet,
             );
         }
     }
@@ -241,6 +246,7 @@ export class ChatUI {
 
             this._socket.emit('message', {
                 username: this._username,
+                login: this._login,
                 msg,
                 socketID: this._socket.id,
             });
@@ -294,6 +300,20 @@ export class ChatUI {
             Swal.showJoinToNewRoomModal(this._socket, this._roomName, roomName);
     }
 
+    async _onLogoutClick(e) {
+        e.preventDefault();
+
+        Session.forgot();
+        Cookies.remove('username');
+        this._socket.disconnect();
+        this._username = null;
+        this._login = null;
+
+        await Swal.showLogoutSuccessModal();
+
+        this._initSession();
+    }
+
     _onCreatePrivateMessageClick(e) {
         e.preventDefault();
 
@@ -303,8 +323,6 @@ export class ChatUI {
             el = el.parentNode;
 
         const to = el.getAttribute('data-to');
-
-        console.log(to);
 
         if (to !== this._username) {
 

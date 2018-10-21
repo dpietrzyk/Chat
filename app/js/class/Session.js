@@ -4,6 +4,22 @@ let _savedToken;
 
 export class Session {
 
+    static get token() {
+        return _savedToken || Cookies.get('jwt');
+    }
+
+    static get usernameFromToken() {
+        if (!this.token)
+            throw new Error('No saved token!');
+
+        return this.decodeToken(this.token).name;
+    }
+
+    static forgot() {
+        _savedToken = '';
+        Cookies.remove('jwt');
+    }
+
     static async authenticate(credentials) {
         try {
             const response = await axios.post('authenticate', {...credentials});
@@ -17,7 +33,6 @@ export class Session {
             return await this.getOrCreateToken();
         }
     };
-
 
     static async getOrCreateToken(socket) {
         if (!this.token) {
@@ -33,17 +48,6 @@ export class Session {
         const base64 = base64Url.replace('-', '+').replace('_', '/');
 
         return JSON.parse(window.atob(base64));
-    }
-
-    static get token() {
-        return _savedToken || Cookies.get('jwt');
-    }
-
-    static get usernameFromToken() {
-        if (!this.token)
-            throw new Error('No saved token!');
-
-        return this.decodeToken(this.token).name;
     }
 
 }

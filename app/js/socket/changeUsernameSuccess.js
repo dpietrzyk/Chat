@@ -1,4 +1,4 @@
-import { Swal } from '../class/Swal.js';
+import {Swal} from '../class/Swal.js';
 
 export const changeUsernameSuccess = (socket, chatIU) => {
     socket.on('changeUsernameSuccess', ({username}) => {

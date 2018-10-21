@@ -1,5 +1,5 @@
-const FirestoreMessages = require("./../firebase/firestore/FirestoreMessages.js");
-const JWT = require("./../class/auth/JWT");
+const FirestoreMessages = require('./../firebase/firestore/FirestoreMessages.js');
+const JWT = require('./../class/auth/JWT');
 
 const messagesRoute = async (messagesRef, req, res) => {
     const {authorization} = req.headers;

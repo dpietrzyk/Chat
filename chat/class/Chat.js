@@ -1,5 +1,8 @@
 const FirebaseApp = require('./../firebase/firebaseApp');
 
+const passHash = require('password-hash');
+
+
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
@@ -34,11 +37,6 @@ class Chat {
         this.firebaseApp.init();
         this._initServer();
 
-        this.firebaseApp.usersRef.get().then(snapshot => {
-            snapshot.forEach(doc => {
-                console.log(doc.id, '=>', doc.data());
-            });
-        });
     }
 
     get rooms() {

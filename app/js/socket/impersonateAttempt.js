@@ -1,4 +1,4 @@
-import { Swal } from '../class/Swal.js';
+import {Swal} from '../class/Swal.js';
 
 export const impersonateAttempt = (socket) => {
     socket.on('impersonateAttempt', ({username}) => {
