@@ -35,7 +35,6 @@ class JWT {
         };
     }
 
-
 }
 
 module.exports = JWT;
