@@ -2,8 +2,10 @@ class FirestoreUser {
 
     static async get(usersRef, username) {
         let user;
-        const UserSnapshot = await usersRef.where('name', '==', username).get();
-        UserSnapshot.forEach(doc => {
+        const userSnapshot = await usersRef.where('name', '==', username).get();
+        console.log(userSnapshot)
+        userSnapshot.forEach(doc => {
+            console.log('here')
             user = doc.data();
         });
 

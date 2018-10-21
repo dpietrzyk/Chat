@@ -1,18 +1,18 @@
 const Authentication = require('./../class/auth/Authentication');
 const FirebaseUser = require('./../firebase/firestore/FirestoreUser');
 
-const authenticateRoute = async (req, res) => {
-  const {username, pass} = req.body;
+const authenticateRoute = async (usersRef, req, res) => {
+    const {username, pass} = req.body;
 
-  try {
+    try {
+        const user = await FirebaseUser.get(usersRef, username);
 
-    const user = await FirebaseUser.get(this.firebaseApp.usersRef, username);
-    const token = Authentication.authenticate(user, pass);
-    res.send(token);
+        const token = Authentication.authenticate(user, pass);
+        res.send(token);
 
-  } catch (e) {
-    res.sendStatus(401);
-  }
+    } catch (e) {
+        res.sendStatus(401);
+    }
 };
 
 module.exports = authenticateRoute;

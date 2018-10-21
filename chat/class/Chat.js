@@ -88,7 +88,9 @@ class Chat {
     }
 
     _registerRoutes() {
-        this._app.post('/authenticate', authenticateRoute);
+        this._app.post('/authenticate', (req, res) => {
+            authenticateRoute(this.firebaseApp.usersRef, req, res);
+        });
         this._app.get('/messages', (req, res) => {
             messagesRoute(this.firebaseApp.messagesRef, req, res);
         });
@@ -96,9 +98,7 @@ class Chat {
 
     _registerSockets() {
         this._io.on('connection', socket => {
-            const {jwt} = socket.handshake.query;
-
-            verifyToken(socket, jwt);
+            verifyToken(socket);
 
             changeRoomSocket(socket, this);
             changeUsernameSocket(socket, this);
@@ -107,7 +107,6 @@ class Chat {
             disconnectSocket(socket, this);
             messageSocket(socket, this);
             privateMessageSocket(socket, this);
-
         });
     }
 

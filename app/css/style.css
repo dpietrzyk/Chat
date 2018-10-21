@@ -31,6 +31,7 @@ nav .brand-logo {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .messages-box {
@@ -80,7 +81,7 @@ span.card-title-time {
     display: flex;
     flex-direction: column;
     width: 25%;
-    background: lightblue;
+    /*background: lightblue;*/
     z-index: 1;
 }
 
