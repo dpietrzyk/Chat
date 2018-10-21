@@ -13,7 +13,7 @@ const message = (socket, chat) => {
 
       const messageObj = {
         username, msg,
-        date: new Date(),
+        date: Date.now(),
         colorSet: user.colorSet
       };
 
